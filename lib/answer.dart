@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Answer extends StatelessWidget {
   final VoidCallback selectHandler;
-  final String answerText;
+  final answerText;
 
   Answer(this.selectHandler, this.answerText);
 

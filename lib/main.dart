@@ -1,7 +1,8 @@
+import 'package:first_app/result.dart';
 import 'package:flutter/material.dart';
 
 import './quiz.dart';
-import './answer.dart';
+import './result.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -21,21 +22,46 @@ class _MyAppState extends State<MyApp> {
   static const List _questions = [
     {
       'questionText': 'What\'s your fav color?',
-      'answers': ['Black', 'Red', 'Yellow', 'Blue'],
+      'answers': [
+        {'text': 'Black', 'score': 10},
+        {'text': 'Red', 'score': 20},
+        {'text': 'Yellow', 'score': 15},
+        {'text': 'Blue', 'score': 5}
+      ],
     },
     {
       'questionText': 'What\'s your fav animal?',
-      'answers': ['Rabbit', 'Snake', 'Elephant', 'Lion'],
+      'answers': [
+        {'text': 'Rabbit', 'score': 10},
+        {'text': 'Snake', 'score': 20},
+        {'text': 'Lion', 'score': 15},
+        {'text': 'Elephant', 'score': 5}
+      ],
     },
     {
       'questionText': 'What\'s your fav instructor?',
-      'answers': ['Max', 'Brad', 'Code Addict', 'Traversy'],
+      'answers': [
+        {'text': 'Max', 'score': 10},
+        {'text': 'Brad', 'score': 20},
+        {'text': 'Code Addict', 'score': 15},
+        {'text': 'Traversy', 'score': 5}
+      ],
     },
   ];
 
   var _questionIndex = 0;
+  var _totalScore = 0;
 
-  void _answerChosen() {
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
+  }
+
+  void _answerChosen(int score) {
+    _totalScore += score;
+
     setState(() {
       _questionIndex += 1;
     });
@@ -50,19 +76,16 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('My First App'),
-        ),
-        body: _questionIndex < _questions.length
-            ? Quiz(
-                answerQuestion: _answerChosen,
-                questionIndex: _questionIndex,
-                questions: _questions,
-              )
-            : Center(
-                child: Text('You did it!'),
-              ),
-      ),
+          appBar: AppBar(
+            title: Text('My First App'),
+          ),
+          body: _questionIndex < _questions.length
+              ? Quiz(
+                  answerQuestion: _answerChosen,
+                  questionIndex: _questionIndex,
+                  questions: _questions,
+                )
+              : Result(_totalScore)),
     );
   }
 }

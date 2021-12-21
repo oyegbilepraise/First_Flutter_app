@@ -18,48 +18,56 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static const List questions = [
+    {
+      'questionText': 'What\'s your fav color?',
+      'answers': ['Black', 'Red', 'Yellow', 'Blue'],
+    },
+    {
+      'questionText': 'What\'s your fav animal?',
+      'answers': ['Rabbit', 'Snake', 'Elephant', 'Lion'],
+    },
+    {
+      'questionText': 'What\'s your fav instructor?',
+      'answers': ['Max', 'Brad', 'Code Addict', 'Traversy'],
+    },
+  ];
+
   var _questionIndex = 0;
 
   void _answerChosen() {
     setState(() {
       _questionIndex += 1;
     });
-    print(
-      'Answer Selected!',
-    );
+    if (_questionIndex < questions.length) {
+      print('We have more Questions!');
+    } else {
+      print('No More Questions!');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      {
-        'questionText': 'What\'s your fav color?',
-        'answers': ['Black', 'Red', 'Yellow', 'Blue'],
-      },
-      {
-        'questionText': 'What\'s your fav animal?',
-        'answers': ['Rabbit', 'Snake', 'Elephant', 'Lion'],
-      },
-      {
-        'questionText': 'What\'s your fav instructor?',
-        'answers': ['Max', 'Brad', 'Code Addict', 'Traversy'],
-      },
-    ];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('My First App'),
         ),
-        body: Column(
-          children: [
-            Question(
-              questions[_questionIndex]['questionText'],
-            ),
-            Answer(_answerChosen),
-            Answer(_answerChosen),
-            Answer(_answerChosen),
-          ],
-        ),
+        body: _questionIndex < questions.length
+            ? Column(
+                children: [
+                  Question(
+                    questions[_questionIndex]['questionText'],
+                  ),
+                  ...(questions[_questionIndex]['answers'] as List<String>)
+                      .map((answer) {
+                    return Answer(_answerChosen, answer);
+                  }).toList()
+                ],
+              )
+            : Center(
+                child: Text('You did it!'),
+              ),
       ),
     );
   }

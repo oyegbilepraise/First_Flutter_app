@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './question.dart';
+import './quiz.dart';
 import './answer.dart';
 
 // void main() {
@@ -18,7 +18,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static const List questions = [
+  static const List _questions = [
     {
       'questionText': 'What\'s your fav color?',
       'answers': ['Black', 'Red', 'Yellow', 'Blue'],
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _questionIndex += 1;
     });
-    if (_questionIndex < questions.length) {
+    if (_questionIndex < _questions.length) {
       print('We have more Questions!');
     } else {
       print('No More Questions!');
@@ -53,17 +53,11 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('My First App'),
         ),
-        body: _questionIndex < questions.length
-            ? Column(
-                children: [
-                  Question(
-                    questions[_questionIndex]['questionText'],
-                  ),
-                  ...(questions[_questionIndex]['answers'] as List<String>)
-                      .map((answer) {
-                    return Answer(_answerChosen, answer);
-                  }).toList()
-                ],
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                answerQuestion: _answerChosen,
+                questionIndex: _questionIndex,
+                questions: _questions,
               )
             : Center(
                 child: Text('You did it!'),

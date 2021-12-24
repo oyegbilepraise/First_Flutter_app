@@ -82,6 +82,7 @@ class _MyAppState extends State<MyApp> {
           body: _questionIndex < _questions.length
               ? Quiz(
                   answerQuestion: _answerChosen,
+                  // bug here
                   questionIndex: _questionIndex,
                   questions: _questions,
                 )

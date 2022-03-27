@@ -1,16 +1,67 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-void main() {
+void main() async {
+  List _data = await getJSON();
+
+  for (var i = 0; i < _data.length; i++) {
+    //
+  }
+
+  // _body = _data[0]['body'];
+
   runApp(
     MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('data'),
           centerTitle: true,
+          backgroundColor: Colors.orangeAccent,
         ),
         body: Center(
           child: Center(
-            child: Text('data'),
+            child: ListView.builder(
+              itemCount: _data.length,
+              padding: const EdgeInsets.all(16.0),
+              itemBuilder: (BuildContext context, int position) {
+                if (position.isOdd) return Divider();
+
+                final index = position ~/ 2;
+
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.green,
+                    child: Text(
+                      "${_data[index]['id']}",
+                      style: TextStyle(
+                        fontSize: 17.4,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    "${_data[index]['title']}",
+                    style: TextStyle(fontSize: 19.9),
+                  ),
+                  subtitle: Text(
+                    "${_data[index]['body']}",
+                    style: TextStyle(
+                      fontSize: 14.9,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  onTap: () {
+                    _showOnTapMessage(
+                      context,
+                      "${_data[index]['title']}",
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -18,8 +69,30 @@ void main() {
   );
 }
 
+void _showOnTapMessage(BuildContext context, String message) {
+  var alert = new AlertDialog(
+    title: Text('App'),
+    content: Text(message),
+    actions: [
+      ElevatedButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Text('OK'),
+      )
+    ],
+  );
 
+  showDialog(context: context, builder: (context) => alert);
+}
 
+Future<List> getJSON() async {
+  var url = Uri.https('jsonplaceholder.typicode.com', '/posts');
+
+  var response = await http.get(url);
+
+  return jsonDecode(response.body);
+}
 
 // import 'package:first_app/result.dart';
 // import 'package:flutter/material.dart';
